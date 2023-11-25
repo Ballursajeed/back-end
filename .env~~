@@ -1,6 +1,6 @@
 PORT=8000
 <<<<<<< HEAD
-MONGODB_URI=mongodb+srv://ballursajeed:thisiswrongpassword@cluster0.nllcgum.mongodb.net
+MONGODB_URI=mongodb+srv://ballursajeed:Welcome7867@cluster0.nllcgum.mongodb.net
 =======
 MONGODB_URI=mongodb+srv://ballursajeed:thisiswrongpassword@cluster0.nllcgum.mongodb.net
 >>>>>>> origin/main

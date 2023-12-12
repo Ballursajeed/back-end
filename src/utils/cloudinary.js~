@@ -1,0 +1,8 @@
+import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
+
+cloudinary.config({
+  cloud_name: 'dnhmadsjz',
+  api_key: '467594924116961',
+  api_secret: 'Jdpcei_2PZCk38guj0Y0hWtXGjk'
+});

@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asynHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 const registerUser = asyncHandler( async (req,res) => {
    //get data from frontend
@@ -51,7 +52,7 @@ const registerUser = asyncHandler( async (req,res) => {
        throw  new ApiError(400, "Avatar file is required");
   }
 //6) create new user in db
- User.create({
+ const user = await User.create({
        fullname,
        avatar: avatar.url,
        coverimage: coverImage?.url || " ",
@@ -59,6 +60,21 @@ const registerUser = asyncHandler( async (req,res) => {
        password,
        username: username.toLowerCase()
  })
+
+//7) remove password and refresh tokens
+ const createdUser = await User.findById(user._id).select(
+       "-password -refreshToken"
+ )
+
+//8) finally check the user creation
+ if (!createdUser) {
+      throw new ApiError(500, "Something went wrong while registering user!!")
+ }
+
+//9) return response
+ return res.status(201).json(
+     new ApiResponse(200, createdUser, "User Registered successfully!!")
+ )
 
 } )
 

@@ -4,6 +4,20 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
+
+const generateAccessAndRefreshTokens = async (userId) =>{
+  try {
+      const user = await User.findById(userId)
+      const accessToken = user.generateAccessToken
+      const refreshToken = user.generateRefreshToken
+
+
+
+  } catch (error) {
+    throw new ApiError(500, "Something went wrong while generating refresh and access token")
+  }
+}
+
 const registerUser = asyncHandler( async (req,res) => {
    //get data from frontend
    //validation - not empty
@@ -87,4 +101,42 @@ const registerUser = asyncHandler( async (req,res) => {
 
 } )
 
-export { registerUser, }
+const loginUser = asyncHandler( async (req,res) => {
+     // req body -> data
+     // username or email
+     // find the user
+     // password check
+     // access and refresh token
+     // send cookie
+
+// 1) get the req body
+ const { email, username, password } = req.body;
+
+//2) username or email
+ if (!username || !email) {
+       throw new ApiError(400, "username or email is required!!")
+ }
+
+//3) find the user
+ const user = await User.findOne({
+     $or: [{ username }, { email }]
+  })
+  if (!user) {
+    throw new ApiError(404, "User does not exist");
+  }
+
+//4) password check
+ const isPasswordvalid = await user.isPasswordCorrect(password);
+ if (!isPasswordvalid) {
+    throw new ApiError(401, "Password incorrect!!");
+  }
+
+//5) Access and refresh token
+
+
+})
+
+export {
+	 registerUser,
+    loginUser
+    }

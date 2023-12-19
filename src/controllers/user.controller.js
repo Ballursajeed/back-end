@@ -295,7 +295,7 @@ const logoutUser = asyncHandler(async(req, res) => {
              throw new ApiError(400, "Error while uploading on Avatar")
          }
 
-         await User.findByIdAndUpdate(
+       const user = await User.findByIdAndUpdate(
             req.user?._id,
             {
                $set:{
@@ -304,6 +304,11 @@ const logoutUser = asyncHandler(async(req, res) => {
             },
             { new: true }
          ).select("-password")
+
+           return res
+         .status(200)
+         .json(new ApiError(200, user, "Avatar Image updated successfully"))
+
  })
 
   const updateUsercoverImage = asyncHandler(async(req, res) => {
@@ -319,7 +324,7 @@ const logoutUser = asyncHandler(async(req, res) => {
              throw new ApiError(400, "Error while uploading on Cover image")
          }
 
-         await User.findByIdAndUpdate(
+        const user =  await User.findByIdAndUpdate(
             req.user?._id,
             {
                $set:{
@@ -328,6 +333,10 @@ const logoutUser = asyncHandler(async(req, res) => {
             },
             { new: true }
          ).select("-password")
+
+         return res
+         .status(200)
+         .json(new ApiError(200, user, "Cover Image updated successfully"))
  })
 
 export {
@@ -338,5 +347,6 @@ export {
     changeCurrentPassword,
     getCurrentUser,
     updateAccountDetails,
-    updateUserAvatar
+    updateUserAvatar,
+    updateUsercoverImage
     }
